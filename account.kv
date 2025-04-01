@@ -1,0 +1,134 @@
+#:kivy 2.0.0
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+
+<ImageButton>:
+    size_hint: None, None
+    size: 64, 64
+    allow_stretch: True
+    keep_ratio: False
+
+<MenuButton>:
+    size_hint: None, None
+    size: 64, 64
+    allow_stretch: True
+    keep_ratio: False
+
+<LoginScreen>:
+    name: 'login'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 50
+        spacing: 20
+        
+        Image:
+            source: 'assets/logo.png'
+            size_hint: None, None
+            size: 128, 128
+            pos_hint: {'center_x': 0.5}
+        
+        TextInput:
+            id: email_input
+            hint_text: 'Email'
+            size_hint_y: None
+            height: 40
+            multiline: False
+            
+        TextInput:
+            id: password_input
+            hint_text: 'Password'
+            size_hint_y: None
+            height: 40
+            password: True
+            multiline: False
+            
+        TextInput:
+            id: confirm_input
+            hint_text: 'Confirm Password'
+            size_hint_y: None
+            height: 40
+            password: True
+            multiline: False
+            
+        TextInput:
+            id: nickname_input
+            hint_text: 'Nickname'
+            size_hint_y: None
+            height: 40
+            multiline: False
+            
+        Button:
+            text: 'Login'
+            size_hint_y: None
+            height: 40
+            on_release:
+                if root.validate_inputs(): app.logged_in = True; app.nickname = root.ids.nickname_input.text; app.sm.current = 'main'
+
+<MainScreen>:
+    name: 'main'
+    menu_open: False
+    
+    BoxLayout:
+        orientation: 'vertical'
+        
+        BoxLayout:
+            size_hint_y: None
+            height: 64
+            padding: 5
+            
+            MenuButton:
+                id: menu_button
+                source: 'assets/menu.png'
+                on_release: root.toggle_menu()
+            
+            Label:
+                text: app.nickname
+                size_hint_x: 0.8
+                font_size: 24
+                halign: 'left'
+                valign: 'middle'
+                padding_x: 20
+        
+        BoxLayout:
+            id: menu_container
+            size_hint_y: None
+            height: 0
+            orientation: 'vertical'
+            padding: 5
+            spacing: 5
+            disabled: True
+            opacity: 1 if height > 0 else 0
+            
+            MenuButton:
+                source: 'assets/calendar.png'
+                on_release: app.sm.current = 'calendar'; root.menu_open = False; root.ids.menu_container.height = 0; root.ids.menu_button.source = 'assets/menu.png'
+            
+            MenuButton:
+                source: 'assets/settings.png'
+                on_release: # Здесь переход к настройкам
+            
+            MenuButton:
+                source: 'assets/logout.png'
+                on_release: app.logged_in = False; app.sm.current = 'login'; root.menu_open = False; root.ids.menu_container.height = 0; root.ids.menu_button.source = 'assets/menu.png'
+        
+        Label:
+            text: 'Main Screen'
+            font_size: 24
+
+<CalendarScreen>:
+    name: 'calendar'
+    
+    BoxLayout:
+        orientation: 'vertical'
+        
+        BoxLayout:
+            size_hint_y: None
+            height: 64
+            padding: 5
+            
+            MenuButton:
+                source: 'assets/menu.png'
+                on_release: app.sm.current = 'main'
+        
+        Label:
+            text: 'Calendar Screen'
+            font_size: 24
